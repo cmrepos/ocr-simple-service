@@ -21,6 +21,9 @@ from api.handlers.base import get_422_response
 
 class Params(BaseModel):
     image: str
+    config: str = ''
+    resize: int = 2
+    resample: int = 1
 
 
 async def image_to_string(request):
@@ -41,7 +44,15 @@ async def image_to_string(request):
                                   'data': {},
                                   'status': 'error'}, status=400)
 
-    output = pytesseract.image_to_string(Image.open(image))
+    im = Image.open(image)
+    if params.resize:
+        im = im.resize((im.width * params.resize, im.height *
+                       params.resize), resample=params.resample)
+
+    if params.config:
+        output = pytesseract.image_to_string(im, config=params.config)
+    else:
+        output = pytesseract.image_to_string(Image.open(image))
 
     return web.json_response({'message': 'All OK',
                               'data': {

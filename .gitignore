@@ -1,0 +1,11 @@
+.*
+!.gitignore
+!.pylintrc
+__py*
+*.pyc
+*~
+*.log
+*.rdb
+*.pid
+*.toml
+!pyproject.toml

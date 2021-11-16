@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "ocr-simple-service"
+version = "0.1.0"
+description = "OCR Simple Service"
+authors = ["Merfrei <contact@merfrei.com>"]
+license = "MIT"
+
+[tool.poetry.dependencies]
+python = ">=3.7.1,<4.0"
+aiohttp = {extras = ["speedups"], version = "^3.8.1"}
+toml = "^0.10.2"
+pydantic = "^1.8.2"
+pytesseract = "^0.3.8"
+
+[tool.poetry.dev-dependencies]
+pylint = "^2.11.1"
+ipython = "^7.29.0"
+pytest = "^6.2.5"
+autopep8 = "^1.6.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

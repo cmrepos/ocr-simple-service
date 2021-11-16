@@ -1,0 +1,10 @@
+[MASTER]
+
+ignore=third_party
+jobs=4
+unsafe-load-any-extension=no
+
+
+[MESSAGES CONTROL]
+
+disable=missing-class-docstring,missing-function-docstring,no-name-in-module,invalid-name,too-few-public-methods

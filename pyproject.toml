@@ -6,17 +6,17 @@ authors = ["Merfrei <contact@merfrei.com>"]
 license = "MIT"
 
 [tool.poetry.dependencies]
-python = ">=3.7.1,<4.0"
-aiohttp = {extras = ["speedups"], version = "^3.8.1"}
+python = ">=3.10,<4.0"
+aiohttp = {extras = ["speedups"], version = "^3.9.5"}
 toml = "^0.10.2"
-pydantic = "^1.8.2"
-pytesseract = "^0.3.8"
+pydantic = "^2.7.0"
+pytesseract = "^0.3.10"
 
 [tool.poetry.dev-dependencies]
-pylint = "^2.11.1"
-ipython = "^7.29.0"
-pytest = "^6.2.5"
-autopep8 = "^1.6.0"
+pylint = "^3.1.0"
+ipython = "^8.23.0"
+pytest = "^8.1.1"
+autopep8 = "^2.1.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

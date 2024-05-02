@@ -52,7 +52,7 @@ async def image_to_string(request):
     if params.config:
         output = pytesseract.image_to_string(im, config=params.config)
     else:
-        output = pytesseract.image_to_string(Image.open(image))
+        output = pytesseract.image_to_string(im)
 
     return web.json_response({'message': 'All OK',
                               'data': {

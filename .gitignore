@@ -9,3 +9,4 @@ __py*
 *.pid
 *.toml
 !pyproject.toml
+!config.example.toml

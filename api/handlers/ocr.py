@@ -29,11 +29,11 @@ from api.handlers.base import get_422_response
 
 class Params(BaseModel):
     image: str
-    config: str = ''
-    resize: float = 2.0
+    config: str = '--oem 3 --psm 6'
+    resize: float = 1.0
     resample: int = 1
-    native: bool = False
-    improve: bool = False
+    native: bool = True
+    improve: bool = True
 
 
 def run_tesseract(image, config, output):

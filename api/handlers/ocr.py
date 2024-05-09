@@ -16,7 +16,7 @@ import pytesseract
 import cv2
 import numpy as np
 
-from PIL import Image
+from PIL import Image, ImageOps
 
 from pydantic import BaseModel
 from pydantic import ValidationError
@@ -34,6 +34,7 @@ class Params(BaseModel):
     resample: int = 1
     native: bool = True
     improve: bool = True
+    invert: bool = False
 
 
 def run_tesseract(image, config, output):
@@ -87,6 +88,10 @@ async def image_to_string(request):
     if params.resize:
         im = im.resize((int(im.width * params.resize), int(im.height *
                        params.resize)), resample=params.resample)
+
+    if params.invert:
+        im = im.convert('RGB')
+        im = ImageOps.invert(im)
 
     if params.improve:
         open_cv_img = improve_image(np.array(im))

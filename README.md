@@ -6,7 +6,7 @@ OCR Simple Service
 ```bash
 sudo add-apt-repository ppa:ubuntuhandbook1/webp-pixbuf-loader
 sudo apt update
-sudo apt install webp-pixbuf-loader libwebp-dev
+sudo apt install webp-pixbuf-loader libwebp-dev webp
 ```
 
 ```bash

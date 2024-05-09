@@ -9,9 +9,9 @@ import base64
 from io import BytesIO
 
 import subprocess
-import pytesseract
-
 from tempfile import NamedTemporaryFile
+
+import pytesseract
 
 import cv2
 import numpy as np
@@ -83,6 +83,7 @@ async def image_to_string(request):
                                   'status': 'error'}, status=400)
 
     im = Image.open(image)
+
     if params.resize:
         im = im.resize((int(im.width * params.resize), int(im.height *
                        params.resize)), resample=params.resample)
@@ -97,16 +98,16 @@ async def image_to_string(request):
         else:
             output = pytesseract.image_to_string(im)
     else:
-        image_f = NamedTemporaryFile(delete=False, suffix='.png')
-        image_f.close()
-        im.save(image_f.name, format='PNG')
-        output_f = NamedTemporaryFile(delete=False)
-        output_f.close()
-        run_tesseract(image_f.name, params.config, output_f.name)
-        with open(output_f.name + '.txt', 'r') as f:
-            output = f.read()
-        os.remove(image_f.name)
-        os.remove(output_f.name + '.txt')
+        with NamedTemporaryFile(delete=False, suffix='.png') as image_f:
+            im.save(image_f, format='PNG')
+            output_f = NamedTemporaryFile(delete=False)
+            output_f.close()
+            run_tesseract(image_f.name, params.config, output_f.name)
+            with open(output_f.name + '.txt', 'r', encoding='utf8') as f:
+                output = f.read()
+            os.remove(output_f.name + '.txt')
+
+    im.close()
 
     return web.json_response({'message': 'All OK',
                               'data': {'output': output},

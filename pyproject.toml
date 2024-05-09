@@ -11,6 +11,7 @@ aiohttp = {extras = ["speedups"], version = "^3.9.5"}
 toml = "^0.10.2"
 pydantic = "^2.7.0"
 pytesseract = "^0.3.10"
+opencv-python = "^4.9.0.80"
 
 [tool.poetry.dev-dependencies]
 pylint = "^3.1.0"

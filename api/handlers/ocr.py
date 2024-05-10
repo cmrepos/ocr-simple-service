@@ -35,6 +35,7 @@ class Params(BaseModel):
     native: bool = True
     improve: bool = True
     invert: bool = False
+    padding: int = 0
 
 
 def run_tesseract(image, config, output):
@@ -52,12 +53,13 @@ def improve_image(img):
     # image to grayscale
     img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     # Applying dilation and erosion to remove the noise
-    kernel = np.ones((1, 1), np.uint8)
-    img = cv2.dilate(img, kernel, iterations=1)
-    img = cv2.erode(img, kernel, iterations=1)
+    # kernel = np.ones((1, 1), np.uint8)
+    # img = cv2.dilate(img, kernel, iterations=1)
+    # img = cv2.erode(img, kernel, iterations=1)
     # Blur
     # cv2.threshold(cv2.GaussianBlur(img, (5, 5), 0), 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
-    _, img = cv2.threshold(cv2.bilateralFilter(img, 5, 75, 75), 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+    # _, img = cv2.threshold(cv2.bilateralFilter(
+    #     img, 5, 75, 75), 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
     # cv2.threshold(cv2.medianBlur(img, 3), 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
     # cv2.adaptiveThreshold(cv2.GaussianBlur(img, (5, 5), 0), 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 31, 2)
     # cv2.adaptiveThreshold(cv2.bilateralFilter(img, 9, 75, 75), 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 31, 2)
@@ -77,7 +79,7 @@ async def image_to_string(request):
 
     try:
         image = BytesIO(base64.decodebytes(
-                        params.image.encode('utf8')))
+                        params.image.encode('utf8') + b'=' * (-len(params.image) % 4)))
     except (TypeError, binascii.Error):
         return web.json_response({'message': 'It is not a valid image',
                                   'data': {},
@@ -88,6 +90,12 @@ async def image_to_string(request):
     if params.resize:
         im = im.resize((int(im.width * params.resize), int(im.height *
                        params.resize)), resample=params.resample)
+
+    if params.padding:
+        new_im = Image.new(
+            im.mode, (im.width + params.padding * 2, im.height + params.padding * 2))
+        new_im.paste(im, (params.padding, params.padding))
+        im = new_im
 
     if params.invert:
         im = im.convert('RGB')

@@ -53,16 +53,16 @@ def improve_image(img):
     # image to grayscale
     img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     # Applying dilation and erosion to remove the noise
-    # kernel = np.ones((1, 1), np.uint8)
-    # img = cv2.dilate(img, kernel, iterations=1)
-    # img = cv2.erode(img, kernel, iterations=1)
+    kernel = np.ones((1, 1), np.uint8)
+    img = cv2.dilate(img, kernel, iterations=1)
+    img = cv2.erode(img, kernel, iterations=1)
     # Blur
     # cv2.threshold(cv2.GaussianBlur(img, (5, 5), 0), 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
     # _, img = cv2.threshold(cv2.bilateralFilter(
     #     img, 5, 75, 75), 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
     # cv2.threshold(cv2.medianBlur(img, 3), 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
     # cv2.adaptiveThreshold(cv2.GaussianBlur(img, (5, 5), 0), 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 31, 2)
-    # cv2.adaptiveThreshold(cv2.bilateralFilter(img, 9, 75, 75), 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 31, 2)
+    cv2.adaptiveThreshold(cv2.bilateralFilter(img, 9, 75, 75), 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 31, 2)
     # cv2.adaptiveThreshold(cv2.medianBlur(img, 3), 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 31, 2)
     return img
 
@@ -78,8 +78,9 @@ async def image_to_string(request):
         return get_422_response(v_errors.errors())
 
     try:
+        image_base64 = params.image.encode('utf8')
         image = BytesIO(base64.decodebytes(
-                        params.image.encode('utf8') + b'=' * (-len(params.image) % 4)))
+                        image_base64 + b'=' * (-len(image_base64) % 4)))
     except (TypeError, binascii.Error):
         return web.json_response({'message': 'It is not a valid image',
                                   'data': {},

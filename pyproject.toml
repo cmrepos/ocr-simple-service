@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "ocr-simple-service"
-version = "0.1.0"
+package-mode = false
 description = "OCR Simple Service"
 authors = ["Merfrei <contact@merfrei.com>"]
 license = "MIT"

@@ -2,7 +2,6 @@
 This is the main AIOHTTP server
 """
 
-import asyncio
 import argparse
 from aiohttp import web
 from config import get_config
@@ -23,10 +22,8 @@ def parse_arguments():
 def run_server():
     '''Run the main aiohttp server'''
     config = get_config()
-    loop = asyncio.get_event_loop()
-    app = loop.run_until_complete(init_app(config))
     args = parse_arguments()
-    web.run_app(app, path=args.path, port=args.port)
+    web.run_app(init_app(config), path=args.path, port=args.port)
 
 
 if __name__ == '__main__':
